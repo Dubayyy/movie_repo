@@ -1,15 +1,46 @@
 <?php
-
+namespace Config;
 use CodeIgniter\Router\RouteCollection;
-
-/**
- * @var RouteCollection $routes
+// Create a new instance of our RouteCollection class.
+$routes = Services::routes();
+// Load the system's routing file first, so that the app and ENVIRONMENT
+// can override as needed.
+if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
+    require SYSTEMPATH . 'Config/Routes.php';
+}
+/*
+ * --------------------------------------------------------------------
+ * Router Setup
+ * --------------------------------------------------------------------
  */
-$routes->get('/', 'Home::index');
+$routes->setDefaultNamespace('App\Controllers');
+$routes->setDefaultController('Home');
+$routes->setDefaultMethod('index');
+$routes->setTranslateURIDashes(false);
+$routes->set404Override();
+$routes->setAutoRoute(true);
+/*
+ * --------------------------------------------------------------------
+ * Route Definitions
+ * --------------------------------------------------------------------
+ */
 
-$routes->get('/movies', 'MovieController::index'); // Show all movies
-$routes->get('/movies/create', 'MovieController::create'); // Show form to add movie
-$routes->post('/movies/store', 'MovieController::store'); // Save movie to DB
-$routes->get('/movies/edit/(:num)', 'MovieController::edit/$1'); // Show edit form
-$routes->post('/movies/update/(:num)', 'MovieController::update/$1'); // Update movie
-$routes->get('/movies/delete/(:num)', 'MovieController::delete/$1'); // Delete movie
+//Route to test my database connection
+$routes->get('test/database', 'Test::database');
+// We get a performance increase by specifying the default
+// route since we don't have to scan directories.
+$routes->get('/', 'Home::index');
+// Auth routes
+$routes->get('auth/login', 'Auth::login');
+$routes->get('auth/register', 'Auth::register');
+// Movie routes
+$routes->get('movies', 'Movies::index');
+$routes->get('movies/view/(:num)', 'Movies::view/$1');
+/*
+ * --------------------------------------------------------------------
+ * Additional Routing
+ * --------------------------------------------------------------------
+ */
+if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
+    require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
+}

@@ -1,0 +1,118 @@
+/* Reset & General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #0b132b;
+    color: #ffffff;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background-color: #1c2541;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #5bc0be;
+}
+
+.nav a {
+    margin: 0 15px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav a:hover {
+    color: #5bc0be;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background: url('../images/banner.jpg') center/cover;
+}
+
+.hero h1 {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    background-color: #5bc0be;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background-color: #3a506b;
+}
+
+/* Movies Grid */
+.movies {
+    padding: 50px;
+    text-align: center;
+}
+
+.movies h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.movie-card {
+    background-color: #1c2541;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.movie-card h3 {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+/* Footer */
+.footer {
+    background-color: #1c2541;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
