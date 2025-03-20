@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 750">
+  <!-- Background -->
+  <rect width="500" height="750" fill="#1a1a1a"/>
+  
+  <!-- Border -->
+  <rect x="0" y="0" width="500" height="10" fill="#1e88e5"/>
+  <rect x="0" y="740" width="500" height="10" fill="#1e88e5"/>
+  <rect x="0" y="0" width="10" height="750" fill="#1e88e5"/>
+  <rect x="490" y="0" width="10" height="750" fill="#1e88e5"/>
+  
+  <!-- Film reel icon -->
+  <rect x="150" y="250" width="200" height="150" fill="#333333"/>
+  <rect x="150" y="250" width="200" height="15" fill="#444444"/>
+  <rect x="150" y="280" width="200" height="15" fill="#444444"/>
+  <rect x="150" y="310" width="200" height="15" fill="#444444"/>
+  <rect x="150" y="340" width="200" height="15" fill="#444444"/>
+  <rect x="150" y="370" width="200" height="15" fill="#444444"/>
+  
+  <!-- Text -->
+  <text x="250" y="450" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">No Poster</text>
+  <text x="250" y="480" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#ffffff">Available</text>
+  
+  <!-- Logo -->
+  <text x="250" y="550" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#1e88e5">CineVerse</text>
+</svg>
