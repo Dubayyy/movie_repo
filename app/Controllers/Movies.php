@@ -26,7 +26,7 @@ class Movies extends BaseController
         $data['title'] = 'Discover Movies';
         
         // Pass poster URL method
-        $data['getPosterUrl'] = function($poster_path) {
+        $data['getPosterUrl'] = functsion($poster_path) {
             return $this->tmdb->getPosterUrl($poster_path);
         };
         
@@ -96,7 +96,7 @@ class Movies extends BaseController
         $data['getPosterUrl'] = function($poster_path) {
             return $this->tmdb->getPosterUrl($poster_path);
         };
-        
+
         $data['getBackdropUrl'] = function($backdrop_path) {
             return $this->tmdb->getBackdropUrl($backdrop_path);
         };
