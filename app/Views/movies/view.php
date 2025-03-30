@@ -4,8 +4,9 @@
 
 
 <!-- Movie Hero Section -->
+<!-- Movie Hero Section with extended dark background -->
 <section class="py-0">
-    <div class="position-relative">
+    <div class="position-relative" style="background: rgba(18, 18, 18, 1);">
         <?php if($movie['backdrop_path']): ?>
             <div style="height: 500px; background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(18, 18, 18, 1)), url('<?= $tmdb->getBackdropUrl($movie['backdrop_path']) ?>'); background-size: cover; background-position: center;"></div>
         <?php else: ?>
@@ -13,14 +14,15 @@
         <?php endif; ?>
         
         <div class="container" style="margin-top: -350px; position: relative; z-index: 10;">
+            <!-- Movie details remain unchanged -->
             <div class="row">
                 <div class="col-md-3 mb-4">
                     <div class="card border-0 shadow">
                     <?php if($movie['poster_path']): ?>
                         <img src="<?= $tmdb->getPosterUrl($movie['poster_path']) ?>" alt="<?= $movie['title'] ?>" class="card-img-top">
-<?php else: ?>
-    <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="card-img-top">
-<?php endif; ?>
+                    <?php else: ?>
+                        <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="card-img-top">
+                    <?php endif; ?>
                     </div>
                 </div>
                 <div class="col-md-9 text-white">
@@ -67,57 +69,67 @@
                     
                     <h4 class="mt-4 mb-2">Overview</h4>
                     <p class="mb-4"><?= $movie['overview'] ?></p>
-                    
-                    <?php if(isset($movie['credits']['cast']) && !empty($movie['credits']['cast'])): ?>
-                        <h4 class="mb-2">Cast</h4>
-                        <div class="row mb-4">
-                            <?php 
-                            $castLimit = 4;
-                            $castCount = 0;
-                            foreach($movie['credits']['cast'] as $castMember):
-                                if($castCount >= $castLimit) break;
-                                $castCount++;
-                            ?>
-                                <div class="col-md-3 col-6 mb-2">
-                                    <div class="d-flex align-items-center">
-                                        <?php if($castMember['profile_path']): ?>
-                                            <img src="<?= $tmdb->getPosterUrl($castMember['profile_path'], 'w92') ?>" alt="<?= $castMember['name'] ?>" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                                        <?php else: ?>
-                                            <div class="rounded-circle bg-secondary me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                <i class="fas fa-user"></i>
-                                            </div>
-                                        <?php endif; ?>
-                                        <div>
-                                            <div class="fw-bold"><?= $castMember['name'] ?></div>
-                                            <small><?= $castMember['character'] ?></small>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <?php if(isset($movie['videos']['results']) && !empty($movie['videos']['results'])): ?>
-                        <?php 
-                        $trailer = null;
-                        foreach($movie['videos']['results'] as $video) {
-                            if($video['type'] == 'Trailer') {
-                                $trailer = $video;
-                                break;
-                            }
-                        }
-                        
-                        if($trailer): 
-                        ?>
-                            <h4 class="mb-3">Trailer</h4>
-                            <div class="ratio ratio-16x9 mb-4">
-                                <iframe src="https://www.youtube.com/embed/<?= $trailer['key'] ?>" title="<?= $trailer['name'] ?>" allowfullscreen></iframe>
-                            </div>
-                        <?php endif; ?>
-                    <?php endif; ?>
                 </div>
             </div>
+            
+            <!-- Cast section now clearly within the dark background -->
+            <?php if(isset($movie['credits']['cast']) && !empty($movie['credits']['cast'])): ?>
+                <div class="row text-white">
+                    <div class="col-12">
+                        <h4 class="mb-3">Cast</h4>
+                    </div>
+                    <?php 
+                    $castLimit = 4;
+                    $castCount = 0;
+                    foreach($movie['credits']['cast'] as $castMember):
+                        if($castCount >= $castLimit) break;
+                        $castCount++;
+                    ?>
+                        <div class="col-md-3 col-6 mb-4">
+                            <div class="d-flex align-items-center">
+                                <?php if(isset($castMember['profile_path']) && $castMember['profile_path']): ?>
+                                    <img src="<?= $tmdb->getPosterUrl($castMember['profile_path'], 'w92') ?>" alt="<?= $castMember['name'] ?>" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                <?php else: ?>
+                                    <div class="rounded-circle bg-secondary me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                <?php endif; ?>
+                                <div>
+                                    <div class="fw-bold"><?= $castMember['name'] ?></div>
+                                    <small class="text-light"><?= $castMember['character'] ?></small>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            
+            <!-- Trailer section also within dark background -->
+            <?php if(isset($movie['videos']['results']) && !empty($movie['videos']['results'])): ?>
+                <?php 
+                $trailer = null;
+                foreach($movie['videos']['results'] as $video) {
+                    if($video['type'] == 'Trailer') {
+                        $trailer = $video;
+                        break;
+                    }
+                }
+                
+                if($trailer): 
+                ?>
+                    <div class="row text-white mb-5">
+                        <div class="col-12">
+                            <h4 class="mb-3">Trailer</h4>
+                            <div class="ratio ratio-16x9">
+                                <iframe src="https://www.youtube.com/embed/<?= $trailer['key'] ?>" title="<?= $trailer['name'] ?>" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
+        <!-- Add extra padding at the bottom of the dark background section -->
+        <div style="height: 30px;"></div>
     </div>
 </section>
 
@@ -217,11 +229,13 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                         <div class="movie-card">
                             <div class="movie-card-img">
-                            <?php if($movie['poster_path']): ?>
-                                <img src="<?= $tmdb->getPosterUrl($movie['poster_path']) ?>" alt="<?= $movie['title'] ?>" class="img-fluid">
+                            <?php if($similarMovie['poster_path']): ?>
+    <img src="<?= $tmdb->getPosterUrl($similarMovie['poster_path']) ?>" alt="<?= $similarMovie['title'] ?>" class="img-fluid">
 <?php else: ?>
     <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="img-fluid">
-<?php endif; ?>
+<?php endif; ?> 
+
+
                                 <div class="movie-card-overlay">
                                     <a href="<?= base_url('movies/view/' . $similarMovie['id']) ?>" class="btn btn-sm btn-primary mb-2 w-100">
                                         <i class="fas fa-info-circle me-2"></i>Details

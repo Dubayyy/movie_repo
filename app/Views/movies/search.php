@@ -10,15 +10,20 @@
             </div>
         </div>
         
-        <!-- Search Bar -->
-        <div class="row mb-5">
-            <div class="col-md-8 mx-auto">
-                <form action="<?= base_url('movies/search') ?>" method="get" class="d-flex">
-                    <input type="text" name="q" class="form-control form-control-lg me-2" placeholder="Search for movies..." value="<?= $query ?>">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                </form>
+     <!-- Search Bar -->
+<div class="row mb-5">
+    <div class="col-md-8 mx-auto">
+        <form action="<?= base_url('movies/search') ?>" method="get" class="position-relative">
+            <div class="input-group">
+                <input type="text" name="q" id="pageSearch" class="form-control form-control-lg" placeholder="Search for movies..." value="<?= $query ?>">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
             </div>
-        </div>
+            <div id="pageSearchResults" class="position-absolute w-100 bg-white shadow rounded mt-1 d-none" style="z-index: 1000; max-height: 400px; overflow-y: auto;"></div>
+        </form>
+    </div>
+</div>
+
+
         
         <!-- Movie Grid -->
         <div class="row">
@@ -150,4 +155,101 @@
         <?php endif; ?>
     </div>
 </section>
+
+<?= $this->section('scripts') ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const pageSearchInput = document.getElementById('pageSearch');
+    const pageSearchResults = document.getElementById('pageSearchResults');
+    let pageSearchTimeout;
+    
+    if (pageSearchInput && pageSearchResults) {
+        pageSearchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            
+            // Clear previous timeout
+            clearTimeout(pageSearchTimeout);
+            
+            // Hide results if query is empty
+            if (query === '') {
+                pageSearchResults.classList.add('d-none');
+                return;
+            }
+            
+            // Set a timeout to avoid making requests for every keystroke
+            pageSearchTimeout = setTimeout(function() {
+                // Make AJAX request
+                fetch(`<?= base_url('api/search') ?>?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear previous results
+                        pageSearchResults.innerHTML = '';
+                        
+                        if (data.results && data.results.length > 0) {
+                            // Build results HTML
+                            const resultsList = document.createElement('div');
+                            resultsList.className = 'list-group';
+                            
+                            data.results.slice(0, 5).forEach(movie => {
+                                const resultItem = document.createElement('a');
+                                resultItem.className = 'list-group-item list-group-item-action d-flex align-items-center';
+                                resultItem.href = `<?= base_url('movies/view') ?>/${movie.id}`;
+                                
+                                // Create poster thumbnail
+                                let posterHtml = '';
+                                if (movie.poster_path) {
+                                    posterHtml = `<img src="https://image.tmdb.org/t/p/w92${movie.poster_path}" alt="${movie.title}" class="me-3" style="width: 46px; height: 69px; object-fit: cover;">`;
+                                } else {
+                                    posterHtml = `<div class="bg-secondary me-3" style="width: 46px; height: 69px;"></div>`;
+                                }
+                                
+                                // Create content section
+                                const contentHtml = `
+                                    <div>
+                                        <div class="fw-bold">${movie.title}</div>
+                                        <small>${movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}</small>
+                                    </div>
+                                `;
+                                
+                                resultItem.innerHTML = posterHtml + contentHtml;
+                                resultsList.appendChild(resultItem);
+                            });
+                            
+                            // Add "View all results" link
+                            const viewAllLink = document.createElement('a');
+                            viewAllLink.className = 'list-group-item list-group-item-action text-center';
+                            viewAllLink.href = `<?= base_url('movies/search') ?>?q=${encodeURIComponent(query)}`;
+                            viewAllLink.innerHTML = 'View all results';
+                            resultsList.appendChild(viewAllLink);
+                            
+                            pageSearchResults.appendChild(resultsList);
+                            pageSearchResults.classList.remove('d-none');
+                        } else {
+                            // Show no results message
+                            pageSearchResults.innerHTML = '<div class="p-3 text-center">No results found</div>';
+                            pageSearchResults.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }, 300); // Wait 300ms after last keystroke before searching
+        });
+        
+        // Hide results when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!pageSearchInput.contains(event.target) && !pageSearchResults.contains(event.target)) {
+                pageSearchResults.classList.add('d-none');
+            }
+        });
+        
+        // Show results when focusing on search input if it has value
+        pageSearchInput.addEventListener('focus', function() {
+            if (this.value.trim() !== '') {
+                pageSearchResults.classList.remove('d-none');
+            }
+        });
+    }
+});
+</script>
 <?= $this->endSection() ?>

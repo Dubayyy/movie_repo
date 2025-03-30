@@ -13,6 +13,8 @@
 </head>
 <body>
     <!-- Navigation -->
+     
+
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="<?= base_url() ?>">CineVerse</a>
@@ -52,6 +54,11 @@
                     <?php endif; ?>
                 </ul>
             </div>
+       <!-- Live Search Box -->
+<div class="ms-auto me-3 position-relative">
+    <input type="text" id="liveSearch" class="form-control" placeholder="Search movies...">
+    <div id="searchResults" class="position-absolute w-100 mt-1 bg-white shadow-lg rounded d-none" style="z-index: 1000; max-height: 400px; overflow-y: auto;"></div>
+</div>
         </div>
     </nav>
 
@@ -74,6 +81,10 @@
             <?= session()->getFlashdata('error') ?>
         </div>
     <?php endif; ?>
+
+
+
+
 </div>
 
 
@@ -151,5 +162,102 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <?= $this->renderSection('scripts') ?>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('liveSearch');
+    const searchResults = document.getElementById('searchResults');
+    let searchTimeout;
+    
+    if (searchInput && searchResults) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            
+            // Clear previous timeout
+            clearTimeout(searchTimeout);
+            
+            // Hide results if query is empty
+            if (query === '') {
+                searchResults.classList.add('d-none');
+                return;
+            }
+            
+            // Set a timeout to avoid making requests for every keystroke
+            searchTimeout = setTimeout(function() {
+                // Make AJAX request
+                fetch(`<?= base_url('api/search') ?>?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear previous results
+                        searchResults.innerHTML = '';
+                        
+                        if (data.results && data.results.length > 0) {
+                            // Build results HTML
+                            const resultsList = document.createElement('div');
+                            resultsList.className = 'list-group';
+                            
+                            data.results.slice(0, 5).forEach(movie => {
+                                const resultItem = document.createElement('a');
+                                resultItem.className = 'list-group-item list-group-item-action d-flex align-items-center';
+                                resultItem.href = `<?= base_url('movies/view') ?>/${movie.id}`;
+                                
+                                // Create poster thumbnail
+                                let posterHtml = '';
+                                if (movie.poster_path) {
+                                    posterHtml = `<img src="https://image.tmdb.org/t/p/w92${movie.poster_path}" alt="${movie.title}" class="me-3" style="width: 46px; height: 69px; object-fit: cover;">`;
+                                } else {
+                                    posterHtml = `<div class="bg-secondary me-3" style="width: 46px; height: 69px;"></div>`;
+                                }
+                                
+                                // Create content section
+                                const contentHtml = `
+                                    <div>
+                                        <div class="fw-bold">${movie.title}</div>
+                                        <small>${movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}</small>
+                                    </div>
+                                `;
+                                
+                                resultItem.innerHTML = posterHtml + contentHtml;
+                                resultsList.appendChild(resultItem);
+                            });
+                            
+                            // Add "View all results" link
+                            const viewAllLink = document.createElement('a');
+                            viewAllLink.className = 'list-group-item list-group-item-action text-center';
+                            viewAllLink.href = `<?= base_url('movies/search') ?>?q=${encodeURIComponent(query)}`;
+                            viewAllLink.innerHTML = 'View all results';
+                            resultsList.appendChild(viewAllLink);
+                            
+                            searchResults.appendChild(resultsList);
+                            searchResults.classList.remove('d-none');
+                        } else {
+                            // Show no results message
+                            searchResults.innerHTML = '<div class="p-3 text-center">No results found</div>';
+                            searchResults.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }, 300); // Wait 300ms after last keystroke before searching
+        });
+        
+        // Hide results when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) {
+                searchResults.classList.add('d-none');
+            }
+        });
+        
+        // Show results when focusing on search input if it has value
+        searchInput.addEventListener('focus', function() {
+            if (this.value.trim() !== '') {
+                searchResults.classList.remove('d-none');
+            }
+        });
+    }
+});
+</script>
+
 </body>
 </html>

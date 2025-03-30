@@ -90,4 +90,35 @@ class Movies extends BaseController
         
         return view('movies/view', $data);
     }
+
+    public function search()
+{
+    $query = $this->request->getGet('q');
+    $page = $this->request->getGet('page') ?? 1;
+    
+    if (empty($query)) {
+        return redirect()->to('/movies');
+    }
+    
+    $data['movies'] = $this->tmdb->searchMovies($query, $page);
+    $data['query'] = $query;
+    $data['page'] = $page;
+    $data['title'] = 'Search Results for: ' . $query;
+    $data['tmdb'] = $this->tmdb; 
+    
+    return view('movies/search', $data);
+}
+
+public function ajaxSearch()
+{
+    $query = $this->request->getGet('q');
+    
+    if (!$query) {
+        return $this->response->setJSON(['status' => 'error', 'message' => 'No query provided']);
+    }
+    
+    $results = $this->tmdb->searchMovies($query, 1);
+    return $this->response->setJSON($results);
+}
+
 }    

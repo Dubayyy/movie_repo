@@ -64,6 +64,15 @@ $routes->get('watchlist', 'Watchlist::index');
 $routes->get('watchlist/add/(:num)', 'Watchlist::add/$1');
 $routes->get('watchlist/remove/(:num)', 'Watchlist::remove/$1');
 
+//search route
+$routes->get('api/search', 'Api::search');
+
+//Ajax search & watchlist
+$routes->get('movies/ajax-search', 'Movies::ajaxSearch');
+
+$routes->post('api/watchlist/add', 'Api::addToWatchlist');
+$routes->post('api/watchlist/remove', 'Api::removeFromWatchlist');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

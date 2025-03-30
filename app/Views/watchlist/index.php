@@ -27,7 +27,8 @@
                                         <i class="fas fa-info-circle me-2"></i>Details
                                     </a>
                                     <a href="<?= base_url('watchlist/remove/' . $item['id']) ?>" class="btn btn-sm btn-outline-light w-100">
-                                        <i class="fas fa-trash me-2"></i>Remove
+    <i class="fas fa-trash me-2"></i>Remove
+</a>
                                     </a>
                                 </div>
                             </div>
@@ -79,5 +80,8 @@
             <?php endif; ?>
         </div>
     </div>
-</section>
+
 <?= $this->endSection() ?>
+
+  
+ 
