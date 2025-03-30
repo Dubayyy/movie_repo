@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\MovieModel;
 use App\Models\WatchlistModel;
-use App\Libraries\TmdbService;
+use App\Libraries\TmdbServices;
 
 class Watchlist extends BaseController
 {
@@ -14,7 +14,7 @@ class Watchlist extends BaseController
     
     public function __construct()
     {
-        $this->tmdb = new TmdbService();
+        $this->tmdb = new TmdbServices();
         $this->movieModel = new MovieModel();
         $this->watchlistModel = new WatchlistModel();
     }
@@ -93,7 +93,7 @@ class Watchlist extends BaseController
             'movie_id' => $movie['id']
         ]);
         
-        return redirect()->back()->with('success', 'Movie added to your watchlist');
+        return redirect()->to('movies/view/' . $movieId)->with('success', 'Movie added to your watchlist');
     }
     
     public function remove($id)

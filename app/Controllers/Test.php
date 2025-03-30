@@ -4,66 +4,88 @@ namespace App\Controllers;
 
 class Test extends BaseController
 {
-    public function database()
+    public function index()
     {
-        echo "<h2>Database Connection Test</h2>";
+        echo "Test controller is working!";
+    }
+    
+    public function register_form()
+    {
+        echo '<!DOCTYPE html>
+        <html>
+        <head>
+            <title>Test Registration</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        </head>
+        <body>
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-header">Test Registration</div>
+                    <div class="card-body">
+                        <form action="' . base_url('test/process_register') . '" method="post">
+                            <div class="mb-3">
+                                <label>Username</label>
+                                <input type="text" class="form-control" name="username">
+                            </div>
+                            <div class="mb-3">
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email">
+                            </div>
+                            <div class="mb-3">
+                                <label>Password</label>
+                                <input type="password" class="form-control" name="password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>';
+    }
+    
+    public function process_register()
+    {
+        echo "Received form data:<br>";
+        echo "<pre>";
+        print_r($this->request->getPost());
+        echo "</pre>";
+        
+        echo "Request method: " . $this->request->getMethod() . "<br>";
+        echo "Is POST according to getMethod(): " . ($this->request->getMethod() === 'post' ? 'Yes' : 'No') . "<br>";
+        
+        // Try to create user regardless of method detection
+        $username = $this->request->getPost('username');
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+        
+        if (empty($username) || empty($email) || empty($password)) {
+            echo "Error: Missing required fields.";
+            return;
+        }
+        
+        echo "Attempting to create user with:<br>";
+        echo "Username: $username<br>";
+        echo "Email: $email<br>";
         
         try {
-            $db = \Config\Database::connect();
-            echo "<p style='color: green'>✓ Successfully connected to the database!</p>";
+            $userModel = new \App\Models\UserModel();
+            $result = $userModel->insert([
+                'username' => $username,
+                'email' => $email,
+                'password' => $password
+            ]);
             
-            // List all tables
-            $query = $db->query("SHOW TABLES");
-            echo "<h3>Tables in your database:</h3>";
+            echo "<br>Result: " . ($result ? "Success" : "Failed");
             
-            if ($query->getNumRows() > 0) {
-                echo "<ul>";
-                foreach ($query->getResult() as $row) {
-                    $table = array_values(get_object_vars($row))[0];
-                    echo "<li><strong>$table</strong>";
-                    
-                    // Also check table structure
-                    $structure = $db->query("DESCRIBE $table");
-                    echo "<ul>";
-                    foreach ($structure->getResult() as $field) {
-                        echo "<li>{$field->Field} - {$field->Type}</li>";
-                    }
-                    echo "</ul>";
-                    echo "</li>";
-                }
-                echo "</ul>";
+            if ($result) {
+                echo "<br>User created with ID: " . $userModel->getInsertID();
             } else {
-                echo "<p style='color: orange'>No tables found in the database. Make sure you've created the required tables.</p>";
+                echo "<br>Errors: ";
+                print_r($userModel->errors());
             }
-            
-            // Check each required table
-            $requiredTables = ['users', 'movies', 'watchlists', 'reviews'];
-            echo "<h3>Required Tables Check:</h3>";
-            echo "<ul>";
-            
-            foreach ($requiredTables as $table) {
-                $tableExists = $db->query("SHOW TABLES LIKE '$table'");
-                if ($tableExists->getNumRows() > 0) {
-                    echo "<li style='color: green'>✓ Table '$table' exists</li>";
-                    
-                    // Count records
-                    $countQuery = $db->query("SELECT COUNT(*) as total FROM $table");
-                    $count = $countQuery->getRow()->total;
-                    echo " ($count records)";
-                } else {
-                    echo "<li style='color: red'>✗ Table '$table' does not exist!</li>";
-                }
-            }
-            echo "</ul>";
-            
         } catch (\Exception $e) {
-            echo "<p style='color: red'>Database connection failed: " . $e->getMessage() . "</p>";
-            echo "<p>Please check your .env file and make sure:</p>";
-            echo "<ul>";
-            echo "<li>The database name 'movie_website' exists</li>";
-            echo "<li>Your username and password are correct</li>";
-            echo "<li>The MySQL service is running in XAMPP</li>";
-            echo "</ul>";
+            echo "<br>Exception: " . $e->getMessage();
         }
     }
 }

@@ -1,6 +1,8 @@
 <?= $this->extend('layout') ?>
 
 <?= $this->section('content') ?>
+
+
 <!-- Movie Hero Section -->
 <section class="py-0">
     <div class="position-relative">
