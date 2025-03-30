@@ -259,5 +259,100 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add quick view buttons to movie cards
+    document.querySelectorAll('.movie-card').forEach(function(card) {
+        // Find the movie ID
+        const detailsLink = card.querySelector('a[href*="movies/view/"]');
+        if (detailsLink) {
+            const href = detailsLink.getAttribute('href');
+            const movieId = href.substring(href.lastIndexOf('/') + 1);
+            card.setAttribute('data-movie-id', movieId);
+            
+            // Add a quick view button
+            const overlay = card.querySelector('.movie-card-overlay');
+            if (overlay) {
+                const quickViewBtn = document.createElement('button');
+                quickViewBtn.className = 'btn btn-sm btn-primary w-100 mt-2 quick-view-btn';
+                quickViewBtn.innerHTML = '<i class="fas fa-eye me-2"></i>Quick View';
+                quickViewBtn.setAttribute('data-movie-id', movieId);
+                overlay.appendChild(quickViewBtn);
+            }
+        }
+    });
+    
+    // Set up modal
+    const quickViewModal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+    const quickViewContent = document.getElementById('quickViewContent');
+    
+    // Add click event to quick view buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.quick-view-btn')) {
+            e.preventDefault();
+            const btn = e.target.closest('.quick-view-btn');
+            const movieId = btn.getAttribute('data-movie-id');
+            
+            // Show loading state
+            quickViewContent.innerHTML = `
+              <div class="d-flex justify-content-center align-items-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            `;
+            
+            // Show modal
+            quickViewModal.show();
+            
+            // Fetch movie data
+            fetch('<?= base_url('api/quick-view') ?>?id=' + movieId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        quickViewContent.innerHTML = data.html;
+                    } else {
+                        quickViewContent.innerHTML = `
+                          <div class="p-4 text-white">
+                            <div class="alert alert-danger">Error: ${data.message}</div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    quickViewContent.innerHTML = `
+                      <div class="p-4 text-white">
+                        <div class="alert alert-danger">An error occurred. Please try again.</div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    `;
+                });
+        }
+    });
+});
+</script>
+
+
+
+<!-- Movie Quick View Modal -->
+<div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-dark">
+      <div class="modal-body p-0">
+        <div id="quickViewContent">
+          <div class="d-flex justify-content-center align-items-center p-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
