@@ -13,5 +13,5 @@ class WatchlistModel extends Model
     
     protected $useTimestamps = true;
     protected $createdField = 'added_at';
-    protected $updatedField = ''; // We don't have this field in our table
+    protected $updatedField = ''; 
 }

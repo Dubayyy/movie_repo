@@ -68,10 +68,10 @@ class Watchlist extends BaseController
                 'poster_path' => $movieData['poster_path'],
                 'backdrop_path' => $movieData['backdrop_path'],
                 'overview' => $movieData['overview'],
-                'release_date' => $movieData['release_date'],
-                'popularity' => $movieData['popularity'],
-                'vote_average' => $movieData['vote_average'],
-                'vote_count' => $movieData['vote_count']
+                'release_date' => $movieData['release_date'] ?? null,
+                'popularity' => $movieData['popularity'] ?? 0,
+                'vote_average' => $movieData['vote_average'] ?? 0,
+                'vote_count' => $movieData['vote_count'] ?? 0
             ]);
             
             $movie = $this->movieModel->where('tmdb_id', $movieId)->first();

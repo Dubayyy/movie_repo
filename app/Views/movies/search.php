@@ -5,8 +5,8 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-12">
-                <h1 class="section-title">Discover Movies</h1>
-                <p class="text-muted">Browse through our vast collection of movies.</p>
+                <h1 class="section-title">Search Results</h1>
+                <p class="text-muted">Results for: "<?= $query ?>"</p>
             </div>
         </div>
         
@@ -14,7 +14,7 @@
         <div class="row mb-5">
             <div class="col-md-8 mx-auto">
                 <form action="<?= base_url('movies/search') ?>" method="get" class="d-flex">
-                    <input type="text" name="q" class="form-control form-control-lg me-2" placeholder="Search for movies...">
+                    <input type="text" name="q" class="form-control form-control-lg me-2" placeholder="Search for movies..." value="<?= $query ?>">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                 </form>
             </div>
@@ -107,8 +107,11 @@
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="col-12 text-center">
-                    <p>No movies found.</p>
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                    <h3>No results found</h3>
+                    <p class="text-muted">Try different keywords or browse our popular movies.</p>
+                    <a href="<?= base_url('movies') ?>" class="btn btn-primary mt-3">Browse Movies</a>
                 </div>
             <?php endif; ?>
         </div>
@@ -121,7 +124,7 @@
                         <ul class="pagination justify-content-center">
                             <?php if($page > 1): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="<?= base_url('movies?page=' . ($page - 1)) ?>">Previous</a>
+                                    <a class="page-link" href="<?= base_url('movies/search?q=' . $query . '&page=' . ($page - 1)) ?>">Previous</a>
                                 </li>
                             <?php endif; ?>
                             
@@ -131,13 +134,13 @@
                             
                             for($i = $start; $i <= $end; $i++): ?>
                                 <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                                    <a class="page-link" href="<?= base_url('movies?page=' . $i) ?>"><?= $i ?></a>
+                                    <a class="page-link" href="<?= base_url('movies/search?q=' . $query . '&page=' . $i) ?>"><?= $i ?></a>
                                 </li>
                             <?php endfor; ?>
                             
                             <?php if($page < $movies['total_pages']): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="<?= base_url('movies?page=' . ($page + 1)) ?>">Next</a>
+                                    <a class="page-link" href="<?= base_url('movies/search?q=' . $query . '&page=' . ($page + 1)) ?>">Next</a>
                                 </li>
                             <?php endif; ?>
                         </ul>

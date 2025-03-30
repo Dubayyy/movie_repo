@@ -5,7 +5,7 @@
 <section class="py-0">
     <div class="position-relative">
         <?php if($movie['backdrop_path']): ?>
-            <div style="height: 500px; background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(18, 18, 18, 1)), url('<?= $getBackdropUrl($movie['backdrop_path']) ?>'); background-size: cover; background-position: center;"></div>
+            <div style="height: 500px; background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(18, 18, 18, 1)), url('<?= $tmdb->getBackdropUrl($movie['backdrop_path']) ?>'); background-size: cover; background-position: center;"></div>
         <?php else: ?>
             <div style="height: 300px; background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(18, 18, 18, 1));"></div>
         <?php endif; ?>
@@ -15,7 +15,7 @@
                 <div class="col-md-3 mb-4">
                     <div class="card border-0 shadow">
                     <?php if($movie['poster_path']): ?>
-    <img src="<?= $getPosterUrl($movie['poster_path']) ?>" alt="<?= $movie['title'] ?>" class="card-img-top">
+                        <img src="<?= $tmdb->getPosterUrl($movie['poster_path']) ?>" alt="<?= $movie['title'] ?>" class="card-img-top">
 <?php else: ?>
     <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="card-img-top">
 <?php endif; ?>
@@ -79,7 +79,7 @@
                                 <div class="col-md-3 col-6 mb-2">
                                     <div class="d-flex align-items-center">
                                         <?php if($castMember['profile_path']): ?>
-                                            <img src="<?= $getPosterUrl($castMember['profile_path'], 'w92') ?>" alt="<?= $castMember['name'] ?>" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                            <img src="<?= $tmdb->getPosterUrl($castMember['profile_path'], 'w92') ?>" alt="<?= $castMember['name'] ?>" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
                                         <?php else: ?>
                                             <div class="rounded-circle bg-secondary me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                                                 <i class="fas fa-user"></i>
@@ -216,7 +216,7 @@
                         <div class="movie-card">
                             <div class="movie-card-img">
                             <?php if($movie['poster_path']): ?>
-                                <img src="<?= $getPosterUrl($movie['poster_path']) ?>" alt="<?= $movie['title'] ?>" class="img-fluid">
+                                <img src="<?= $tmdb->getPosterUrl($movie['poster_path']) ?>" alt="<?= $movie['title'] ?>" class="img-fluid">
 <?php else: ?>
     <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="img-fluid">
 <?php endif; ?>
