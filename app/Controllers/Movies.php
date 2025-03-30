@@ -60,35 +60,34 @@ class Movies extends BaseController
             $dbMovie = $this->movieModel->where('tmdb_id', $id)->first();
         }
         
-        // For now, set inWatchlist to false (i'll implement this later)
-        $data['inWatchlist'] = false;
+        // Check if movie is in user's watchlist
+        $inWatchlist = false;
+        if (session()->get('isLoggedIn')) {
+            $watchlistModel = new \App\Models\WatchlistModel();
+            $watchlistItem = $watchlistModel
+                ->where('user_id', session()->get('id'))
+                ->where('movie_id', $dbMovie['id'])
+                ->first();
+            
+            $inWatchlist = $watchlistItem ? true : false;
+        }
+        $data['inWatchlist'] = $inWatchlist;
         
-        // Empty reviews for now (we'll implement this later)
-        $data['reviews'] = [];
+        // Get reviews for this movie
+        $reviewModel = new \App\Models\ReviewModel();
+        $reviews = $reviewModel->join('users', 'users.id = reviews.user_id')
+            ->select('reviews.*, users.username')
+            ->where('reviews.movie_id', $dbMovie['id'])
+            ->orderBy('reviews.created_at', 'DESC')
+            ->findAll();
+            
+        $data['reviews'] = $reviews;
         
         $data['movie'] = $movie;
         $data['dbMovie'] = $dbMovie;
         $data['title'] = $movie['title'] . ' - CineVerse';
-        $data['tmdb'] = $this->tmdb;  // Pass the entire service
+        $data['tmdb'] = $this->tmdb;
         
         return view('movies/view', $data);
     }
-    
-    public function search()
-{
-    $query = $this->request->getGet('q');
-    $page = $this->request->getGet('page') ?? 1;
-    
-    if (empty($query)) {
-        return redirect()->to('/movies');
-    }
-    
-    $data['movies'] = $this->tmdb->searchMovies($query, $page);
-    $data['query'] = $query;
-    $data['page'] = $page;
-    $data['title'] = 'Search Results for: ' . $query;
-    $data['tmdb'] = $this->tmdb;  // This line must be here
-    
-    return view('movies/search', $data);
-}
-}
+}    
