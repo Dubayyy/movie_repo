@@ -134,5 +134,5 @@
     </div>
 </section>
 
-<!-- Keep the rest of the homepage content (Features Section, etc.) -->
 <?= $this->endSection() ?>
+

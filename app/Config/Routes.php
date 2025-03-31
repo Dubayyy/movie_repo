@@ -49,6 +49,9 @@ $routes->get('movies/view/(:num)', 'Movies::view/$1');
 $routes->get('movies/search', 'Movies::search');
 $routes->get('movies/now-playing', 'Movies::nowPlaying');
 
+// Profile route
+$routes->get('profile', 'Home::getProfile');
+
 
 // Review routes
 $routes->post('reviews/create/(:num)', 'Reviews::create/$1');
@@ -71,6 +74,7 @@ $routes->get('movies/ajax-search', 'Movies::ajaxSearch');
 
 //ajax quick view
 $routes->get('api/quick-view', 'Api::quickView');
+
 
 
 /*

@@ -30,7 +30,7 @@ class Api extends BaseController
         ]);
     }
 
-
+     
     public function quickView()
 {
     $id = $this->request->getGet('id');
@@ -142,6 +142,10 @@ class Api extends BaseController
         'html' => $html
     ]);
 }
-    
+
+
+
+
+
 
 }

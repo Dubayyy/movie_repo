@@ -24,5 +24,25 @@ class Home extends BaseController
         };
         
         return view('home/index', $data);
+
+    }
+    
+    public function getProfile()
+    {
+        // Check if user is logged in
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('auth/login')->with('error', 'You must be logged in to view your profile');
+        }
+        
+        $data['title'] = 'My Profile';
+        
+        // Get user data from session
+        $data['user'] = [
+            'id' => session()->get('id'),
+            'username' => session()->get('username'),
+            'email' => session()->get('email')
+        ];
+        
+        return view('home/profile', $data);
     }
 }

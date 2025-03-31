@@ -91,6 +91,41 @@
     <!-- Main Content -->
     <?= $this->renderSection('content') ?>
 
+
+<!-- Geolocation Theater Finder Section -->
+<section class="py-4 bg-light" id="nearbyTheatersSection">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle p-3 me-3">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <h4 class="mb-0">Find Theaters Near You</h4>
+                        </div>
+                        
+                        <p class="text-muted">Looking for a place to watch the latest movies? Use your location to find theaters in your area.</p>
+                        
+                        <div id="geoContent">
+                            <button class="btn btn-primary" onclick="getLocation()">
+                                <i class="fas fa-location-arrow me-2"></i>Find Nearby Theaters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Footer -->
+<footer class="footer">
+  
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -139,16 +174,10 @@
             <div class="text-center text-light opacity-75">
                 <p class="mb-0">&copy; <?= date('Y') ?> CineVerse. All rights reserved.</p>
             </div>
-            <div class="text-center mt-3">
-    <p class="small text-muted">
-        <a href="https://www.themoviedb.org/" target="_blank">
-            <img src="<?= base_url('assets/images/tmdb-logo.jpg') ?>" alt="TMDB" height="20">
-        </a>
-        This product uses the TMDB API but is not endorsed or certified by TMDB.
-    </p>
-     <!-- Add this TMDB attribution at the bottom -->
+           
+     <!-- TMDB attribution  -->
      <div class="text-center mt-3">
-            <p class="small text-muted">
+            <p class="small text-white">
                 <a href="https://www.themoviedb.org/" target="_blank" class="me-2">
                     <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB" height="20">
                 </a>
@@ -159,11 +188,18 @@
         </div>
     </footer>
 
+
+
+<!-- search implementation -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <?= $this->renderSection('scripts') ?>
 
     <script>
+
+ 
+
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('liveSearch');
     const searchResults = document.getElementById('searchResults');
@@ -259,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
+<!-- Quick View  -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Add quick view buttons to movie cards
@@ -353,6 +389,160 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </div>
+
+
+
+<!-- Mobile Device Detection Feature -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Improved mobile detection
+  function isMobileDevice() {
+    // Check if the screen width is mobile-sized AND
+    // either has touch capability OR matches mobile user agent
+    const isMobileWidth = window.innerWidth < 768;
+    const hasTouchCapability = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    return isMobileWidth && (hasTouchCapability || isMobileUserAgent);
+  }
+  
+  // Apply mobile-specific enhancements only if truly on mobile
+  if (isMobileDevice()) {
+    // Add mobile class to body
+    document.body.classList.add('mobile-device');
+    
+    // Adjust movie cards for touch
+    document.querySelectorAll('.movie-card-overlay').forEach(overlay => {
+      overlay.style.opacity = '1';
+      overlay.style.transform = 'translateY(0)';
+    });
+    
+    // Show a mobile-friendly message
+    const mobileMessage = document.createElement('div');
+    mobileMessage.className = 'alert alert-info alert-dismissible fade show mb-0';
+    mobileMessage.innerHTML = `
+      <i class="fas fa-mobile-alt me-2"></i>
+      You're viewing the mobile-optimized version of CineVerse
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    // Insert after navbar
+    const navbar = document.querySelector('.navbar');
+    if (navbar && navbar.nextElementSibling) {
+      navbar.parentNode.insertBefore(mobileMessage, navbar.nextElementSibling);
+    }
+  }
+});
+</script>
+
+
+
+
+<!-- Geolocation JavaScript -->
+<script>
+function getLocation() {
+    const geoContent = document.getElementById('geoContent');
+    
+    // Check if geolocation is available
+    if ("geolocation" in navigator) {
+        geoContent.innerHTML = '<div class="d-flex align-items-center"><div class="spinner-border text-primary me-3" role="status"></div><p class="mb-0">Getting your location...</p></div>';
+        
+        navigator.geolocation.getCurrentPosition(
+            // Success
+            function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                geoContent.innerHTML = `
+                    <div class="alert alert-success">
+                        <p>We found theaters near your location <small>(${lat.toFixed(4)}, ${lng.toFixed(4)})</small></p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5>Cinema City</h5>
+                                    <p class="text-muted">2.3 miles away</p>
+                                    <div class="small mb-2">
+                                        <div class="text-success"><i class="fas fa-circle me-1"></i> Open Now</div>
+                                        <div>Shows every 30 min</div>
+                                    </div>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">View Showtimes</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5>Regal Multiplex</h5>
+                                    <p class="text-muted">3.1 miles away</p>
+                                    <div class="small mb-2">
+                                        <div class="text-success"><i class="fas fa-circle me-1"></i> Open Now</div>
+                                        <div>IMAX Available</div>
+                                    </div>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">View Showtimes</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5>AMC Theaters</h5>
+                                    <p class="text-muted">5.4 miles away</p>
+                                    <div class="small mb-2">
+                                        <div class="text-success"><i class="fas fa-circle me-1"></i> Open Now</div>
+                                        <div>Luxury Seating</div>
+                                    </div>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">View Showtimes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <button class="btn btn-outline-secondary" onclick="getLocation()">
+                            <i class="fas fa-sync-alt me-2"></i>Refresh Location
+                        </button>
+                    </div>
+                `;
+            },
+            // Error
+            function(error) {
+                let errorMessage = "Could not access your location.";
+                
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = "Location access was denied. Please allow location access to use this feature.";
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = "Location information is unavailable at this time.";
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage = "Location request timed out. Please try again.";
+                        break;
+                }
+                
+                geoContent.innerHTML = `
+                    <div class="alert alert-warning">
+                        <p class="mb-2"><i class="fas fa-exclamation-triangle me-2"></i>${errorMessage}</p>
+                        <button class="btn btn-sm btn-primary" onclick="getLocation()">Try Again</button>
+                    </div>
+                `;
+            }
+        );
+    } else {
+        geoContent.innerHTML = '<div class="alert alert-danger">Geolocation is not supported by your browser.</div>';
+    }
+}
+</script>
+</body>
+</html>
+
+
 
 </body>
 </html>
