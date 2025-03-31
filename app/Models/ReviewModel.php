@@ -13,5 +13,5 @@ class ReviewModel extends Model
     
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
-    protected $updatedField = ''; // We don't have this field in our table
+    protected $updatedField = ''; 
 }

@@ -7,7 +7,7 @@ use App\Models\UserModel;
 class Auth extends BaseController
 {
 
-
+//User Log in
     public function login()
     {
         // Already logged in check
@@ -49,6 +49,8 @@ class Auth extends BaseController
         return view('auth/login');
     }
     
+
+    //user registration 
     public function register()
     {
         // Already logged in check
@@ -87,6 +89,8 @@ class Auth extends BaseController
 
     }
 
+
+    //log out
     public function logout()
 {
     // Clear all session data

@@ -13,7 +13,7 @@ class UserModel extends Model
     
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
-    protected $updatedField = ''; // new field
+    protected $updatedField = ''; 
     
     protected $beforeInsert = ['hashPassword'];
     

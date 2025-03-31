@@ -13,8 +13,6 @@
 </head>
 <body>
     <!-- Navigation -->
-     
-
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="<?= base_url() ?>">CineVerse</a>
@@ -54,6 +52,8 @@
                     <?php endif; ?>
                 </ul>
             </div>
+
+
        <!-- Live Search Box -->
 <div class="ms-auto me-3 position-relative">
     <input type="text" id="liveSearch" class="form-control" placeholder="Search movies...">
@@ -190,7 +190,7 @@
 
 
 
-<!-- search implementation -->
+      <!-- search implementation -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -198,9 +198,7 @@
 
     <script>
 
- 
-
-document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('liveSearch');
     const searchResults = document.getElementById('searchResults');
     let searchTimeout;
@@ -295,9 +293,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- Quick View  -->
+   <!-- Quick View  -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     // Add quick view buttons to movie cards
     document.querySelectorAll('.movie-card').forEach(function(card) {
         // Find the movie ID
@@ -407,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return isMobileWidth && (hasTouchCapability || isMobileUserAgent);
   }
   
-  // Apply mobile-specific enhancements only if truly on mobile
+  // Apply mobile-specific enhancements only if is on mobile
   if (isMobileDevice()) {
     // Add mobile class to body
     document.body.classList.add('mobile-device');
@@ -538,11 +536,8 @@ function getLocation() {
         geoContent.innerHTML = '<div class="alert alert-danger">Geolocation is not supported by your browser.</div>';
     }
 }
+
+
 </script>
-</body>
-</html>
-
-
-
 </body>
 </html>

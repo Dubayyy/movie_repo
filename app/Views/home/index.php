@@ -34,17 +34,17 @@
                 <?php 
                 $count = 0;
                 foreach($featured_movies['results'] as $movie): 
-                    if($count >= 8) break; // Limit to 8 movies
+                    if($count >= 8) break; // Limits to 8 movies
                     $count++;
                 ?>
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                         <div class="movie-card">
                             <div class="movie-card-img">
                             <?php if($movie['poster_path']): ?>
-    <img src="<?= $getPosterUrl($movie['poster_path']) ?>" alt="<?= $movie['title'] ?>" class="img-fluid">
-<?php else: ?>
-    <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="img-fluid">
-<?php endif; ?>
+                                <img src="<?= $getPosterUrl($movie['poster_path']) ?>" alt="<?= $movie['title'] ?>" class="img-fluid">
+                                    <?php else: ?>
+                                <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="img-fluid">
+                                    <?php endif; ?>
                                 <div class="movie-card-overlay">
                                     <a href="<?= base_url('movies/view/' . $movie['id']) ?>" class="btn btn-sm btn-primary mb-2 w-100">
                                         <i class="fas fa-info-circle me-2"></i>Details
@@ -133,6 +133,7 @@
         </div>
     </div>
 </section>
+
 
 <?= $this->endSection() ?>
 

@@ -27,8 +27,8 @@
                                         <i class="fas fa-info-circle me-2"></i>Details
                                     </a>
                                     <a href="<?= base_url('watchlist/remove/' . $item['id']) ?>" class="btn btn-sm btn-outline-light w-100">
-    <i class="fas fa-trash me-2"></i>Remove
-</a>
+                                         <i class="fas fa-trash me-2"></i>Remove
+                                    </a>
                                     </a>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                     <div class="py-5">
                         <i class="fas fa-film fa-4x mb-3 text-muted"></i>
                         <h4>Your watchlist is empty</h4>
-                        <p class="text-muted">Start adding movies to keep track of what you want to watch.</p>
+                        <p class="text-muted">add movies to keep track of what you want to watch.</p>
                         <a href="<?= base_url('movies') ?>" class="btn btn-primary mt-3">
                             <i class="fas fa-search me-2"></i>Browse Movies
                         </a>

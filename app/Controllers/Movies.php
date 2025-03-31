@@ -40,10 +40,10 @@ class Movies extends BaseController
             return redirect()->to('/movies')->with('error', 'Movie not found');
         }
         
-        // Check if movie exists in our database
+        // Check if movie exists in my database
         $dbMovie = $this->movieModel->where('tmdb_id', $id)->first();
         
-        // If not, add it to our database
+        // If not, add it to my database
         if (!$dbMovie) {
             $this->movieModel->insert([
                 'tmdb_id' => $movie['id'],

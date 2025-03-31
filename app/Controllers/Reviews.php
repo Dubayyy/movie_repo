@@ -67,7 +67,7 @@ class Reviews extends BaseController
     
     public function delete($id)
     {
-        // Check if user is logged in
+        // Checks if user is logged in
         if (!session()->get('isLoggedIn')) {
             return redirect()->to('auth/login');
         }
@@ -75,12 +75,12 @@ class Reviews extends BaseController
         $userId = session()->get('id');
         $review = $this->reviewModel->find($id);
         
-        // Check if review exists and belongs to user
+        // Checks if review exists and belongs to user
         if (!$review || $review['user_id'] != $userId) {
             return redirect()->back()->with('error', 'You cannot delete this review');
         }
         
-        // Delete the review
+        // Deletes the review
         $this->reviewModel->delete($id);
         
         return redirect()->back()->with('success', 'Review deleted successfully');

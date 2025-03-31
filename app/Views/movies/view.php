@@ -4,7 +4,6 @@
 
 
 <!-- Movie Hero Section -->
-<!-- Movie Hero Section with extended dark background -->
 <section class="py-0">
     <div class="position-relative" style="background: rgba(18, 18, 18, 1);">
         <?php if($movie['backdrop_path']): ?>
@@ -14,7 +13,8 @@
         <?php endif; ?>
         
         <div class="container" style="margin-top: -350px; position: relative; z-index: 10;">
-            <!-- Movie details remain unchanged -->
+
+            <!-- Movie details -->
             <div class="row">
                 <div class="col-md-3 mb-4">
                     <div class="card border-0 shadow">
@@ -72,7 +72,7 @@
                 </div>
             </div>
             
-            <!-- Cast section now clearly within the dark background -->
+            <!-- Cast section -->
             <?php if(isset($movie['credits']['cast']) && !empty($movie['credits']['cast'])): ?>
                 <div class="row text-white">
                     <div class="col-12">
@@ -104,7 +104,7 @@
                 </div>
             <?php endif; ?>
             
-            <!-- Trailer section also within dark background -->
+            <!-- Trailer section -->
             <?php if(isset($movie['videos']['results']) && !empty($movie['videos']['results'])): ?>
                 <?php 
                 $trailer = null;
@@ -128,7 +128,7 @@
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <!-- Add extra padding at the bottom of the dark background section -->
+        <!-- Added extra padding at the bottom -->
         <div style="height: 30px;"></div>
     </div>
 </section>
@@ -232,10 +232,10 @@
                         <div class="movie-card">
                             <div class="movie-card-img">
                             <?php if($similarMovie['poster_path']): ?>
-    <img src="<?= $tmdb->getPosterUrl($similarMovie['poster_path']) ?>" alt="<?= $similarMovie['title'] ?>" class="img-fluid">
-<?php else: ?>
-    <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="img-fluid">
-<?php endif; ?> 
+                                <img src="<?= $tmdb->getPosterUrl($similarMovie['poster_path']) ?>" alt="<?= $similarMovie['title'] ?>" class="img-fluid">
+                                    <?php else: ?>
+                                <img src="<?= base_url('assets/images/no-poster.jpg') ?>" alt="No poster available" class="img-fluid">
+                                     <?php endif; ?> 
 
 
                                 <div class="movie-card-overlay">

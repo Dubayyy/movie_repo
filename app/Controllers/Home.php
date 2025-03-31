@@ -27,6 +27,8 @@ class Home extends BaseController
 
     }
     
+
+    //User profile
     public function getProfile()
     {
         // Check if user is logged in

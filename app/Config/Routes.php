@@ -29,8 +29,8 @@ $routes->setAutoRoute(true);
 $routes->get('test/database', 'Test::database');
 $routes->get('auth/test_db', 'Auth::test_db');
 
-// We get a performance increase by specifying the default
-// route since we don't have to scan directories.
+
+// Home route
 $routes->get('/', 'Home::index');
 
 // Auth routes

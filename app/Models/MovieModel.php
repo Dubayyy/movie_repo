@@ -17,5 +17,5 @@ class MovieModel extends Model
     
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
-    protected $updatedField = ''; // I don't have this field in table yet
+    protected $updatedField = ''; 
 }

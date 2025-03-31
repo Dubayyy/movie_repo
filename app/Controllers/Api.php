@@ -52,7 +52,7 @@ class Api extends BaseController
         ]);
     }
     
-    // Prepare HTML for the modal
+    //HTML for the modal display
     $html = '
     <div class="position-relative" style="background-color: #121212; color: white;">
         <button type="button" class="btn-close position-absolute end-0 top-0 m-3 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>

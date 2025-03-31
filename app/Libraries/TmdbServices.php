@@ -10,7 +10,7 @@ class TmdbServices
     
     public function __construct()
     {
-        // Load access token from .env file
+        // Loads access token from .env file
         $this->accessToken = getenv('TMDB_ACCESS_TOKEN');
         
         if (!$this->accessToken) {
